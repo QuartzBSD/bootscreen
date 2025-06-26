@@ -4,11 +4,19 @@ import sdl2
 import sdl2.ext
 import time
 
+def framebuffer_res():
+    try:
+        with open("/sys/class/graphics/fb0/virtual_size", "r") as f:
+            w, h = map(int, f.read().strip().split(","))
+            return w, h
+    except Exception as error:
+        print(f"Failed to fetch display resolution: {error}")
+        return 640, 480  # fallback
 
 sdl2.ext.init()
 # window = sdl2.ext.Window("Quartz Compositor ( Amethyine )", size=(1280, 720))
-window = sdl2.ext.Window("Quartz Compositor ( Amethyine )", size=(1600, 900))
-# window = sdl2.ext.Window("QuartzOS Splash", size=(0, 0))
+# window = sdl2.ext.Window("Quartz Compositor ( Amethyine )", size=(1600, 900))
+window = sdl2.ext.Window("QuartzOS Splash", size=(framebuffer_res()[0], framebuffer_res()[1]))
 sdl2.SDL_SetWindowFullscreen(window.window, sdl2.SDL_WINDOW_FULLSCREEN)
 
 window.show()
@@ -39,7 +47,8 @@ logo_opacity = 0
 
 # sdl2.surface.SDL_BlitScaled(title.surface, None, title_surface.surface, None)
 
-sdl2.SDL_BlitSurface(window_title_text, None, window_surface, window_title_surface)
+# sdl2.SDL_BlitSurface(window_title_text, None, window_surface, window_title_surface)
+
 def run():
 	global logo_opacity
 	running = True
